@@ -10,8 +10,10 @@ def load_score(path: str):
 
 def extract_monophonic_events(score) -> List[Event]:
     """
-    Flatten notes and transform into Event objects.
-    Rests and chords are skipped (decoder is currently monophonic-only).
+    Flatten notes and transform into :class:`Event` objects.
+
+    Chords are skipped explicitly while rests are inherently excluded by
+    ``score.recurse().notes``.
     """
     evts: List[Event] = []
     idx = 0

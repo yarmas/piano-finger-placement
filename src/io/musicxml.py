@@ -1,7 +1,7 @@
 from typing import List
 from pathlib import Path
 
-from music21 import converter, note, chord, expressions, articulations, stream
+from music21 import converter, note, chord, expressions, articulations, stream, spanner
 
 from ..pfai.types import Event
 
@@ -27,8 +27,8 @@ def extract_monophonic_events(score) -> List[Event]:
             continue
         if isinstance(n, note.Note):
             tied = n.tie is not None
-            # music21 encodes slurs as Span objects; editions vary, so we also accept Tenuto as legato-ish
-            has_slur = any(isinstance(x, expressions.Slur) for x in n.expressions)
+            # music21 encodes slurs as Spanner objects; editions vary, so we also accept Tenuto as legato-ish
+            has_slur = any(isinstance(x, spanner.Slur) for x in n.getSpannerSites())
             is_stacc = any(isinstance(a, articulations.Staccato) for a in n.articulations)
             evts.append(Event(
                 idx=idx,
@@ -61,19 +61,34 @@ def write_fingerings_and_notes(src_path: str,
         if isinstance(n, chord.Chord):
             continue
         if k in fingering_map:
-            n.expressions.append(expressions.Fingering(fingering_map[k][0]))
+            n.articulations.append(articulations.Fingering(fingering_map[k][0]))
         k += 1
 
+    parts = None
     # Write margin notes as text expressions near their time.
     for t, text in margin_notes:
         try:
             meas_num = max(1, int(t) + 1)
             te = expressions.TextExpression(text)
-            te.placement = "above"
-            s.parts[0].measure(meas_num).insert(t, te)
+            if isinstance(s, stream.Score):
+                parts = list(s.parts)
+                if parts:
+                    target = parts[0]
+                else:
+                    target = s
+            else:
+                target = s
+            measure = target.measure(meas_num)
+            if measure is not None:
+                measure.insert(t, te)
         except Exception:
             # layout can fail on some imported editions; ignore rather than crash
             pass
+        
+    for n in s.recurse().notesAndRests:
+        if hasattr(n, 'duration') and hasattr(n.duration, 'type'):
+            if n.duration.type == "2048th":
+                print(f"Found problematic duration at offset {n.offset}: {n}")
 
     # Choose output based on extension; default to MusicXML
     out = Path(out_path)

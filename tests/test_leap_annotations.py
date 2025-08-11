@@ -1,7 +1,7 @@
-from piano_fingering.annotate.notes import collect_margin_notes
-from piano_fingering.pfai.config import DEFAULT_CONFIG
-from piano_fingering.features.patterns import is_large_leap
-from piano_fingering.pfai.types import Event
+from ..src.annotate.notes import collect_margin_notes
+from ..src.pfai.config import DEFAULT_CONFIG
+from ..src.features.patterns import is_large_leap
+from ..src.pfai.types import Event
 
 
 def test_is_large_leap_detection():

@@ -1,11 +1,11 @@
-from ..constants import FINGERS
+from ..pfai.constants import FINGERS
 from ..features.geometry import white_key_distance, is_black
 from ..features.patterns import (
     is_neighbor_turn,
     is_repeat_reartic,
     is_consecutive_walkthrough,
 )
-from ..config import HandProfile, ModelConfig
+from ..pfai.config import HandProfile, ModelConfig
 
 def start_cost(f: int, m: int, cfg: ModelConfig) -> float:
     """

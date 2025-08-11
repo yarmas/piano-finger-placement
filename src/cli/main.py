@@ -16,6 +16,7 @@ def _profile_from_name(name: str) -> HandProfile:
     return profiles.get(name, PROFILE_M)
     # The get method in _profile_from_name returns PROFILE_M if the name is not found.
     # This ensures the return type is always HandProfile.
+    
 def app():
     parser = argparse.ArgumentParser(description="Piano Fingering auto-annotator (monophonic, rollover-aware).")
     parser.add_argument("--infile", required=True, help="Input MusicXML file")

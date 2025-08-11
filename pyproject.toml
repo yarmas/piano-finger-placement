@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "piano-fingering"
 version = "0.1.0"
 description = "Hybrid rule+DP model to auto-finger piano MusicXML scores with rollover priorities and pedagogical notes."
-authors = [{ name = "You" }]
+authors = [{ name = "Samuel Ray" }]
 requires-python = ">=3.9"
 dependencies = [
   "music21>=9.1.0",

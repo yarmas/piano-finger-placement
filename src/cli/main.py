@@ -1,11 +1,8 @@
 import argparse
-from ..io.musicxml import load_score, extract_monophonic_events, write_fingerings_and_notes
-from ..decoding.second_order_dp import decode_monophonic_second_order
-from ..annotate.notes import collect_margin_notes
 from ..pfai.config import (
     DEFAULT_CONFIG,
     PROFILE_S, PROFILE_M, PROFILE_L, PROFILE_XL,
-    HandProfile, ModelConfig
+    HandProfile, ModelConfig,
 )
 
 def _profile_from_name(name: str) -> HandProfile:
@@ -18,6 +15,14 @@ def _profile_from_name(name: str) -> HandProfile:
     # This ensures the return type is always HandProfile.
     
 def app():
+    from ..io.musicxml import (
+        load_score,
+        extract_monophonic_events,
+        write_fingerings_and_notes,
+    )
+    from ..decoding.second_order_dp import decode_monophonic_second_order
+    from ..annotate.notes import collect_margin_notes
+
     parser = argparse.ArgumentParser(description="Piano Fingering auto-annotator (monophonic, rollover-aware).")
     parser.add_argument("--infile", required=True, help="Input MusicXML file")
     parser.add_argument("--outfile", required=True, help="Output MusicXML file")

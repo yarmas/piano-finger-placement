@@ -70,7 +70,10 @@ def decode_monophonic_second_order(
     f_prev, f_cur = int(tail[0]), int(tail[1])
     fingers = [f_prev, f_cur]
     for i in range(N-1, 1, -1):
-        f2, f1 = back[i][f_prev][f_cur]
+        back_entry = back[i][f_prev][f_cur]
+        if back_entry is None:
+            break  # Stop backtracking if no valid entry
+        f2, f1 = back_entry
         fingers.append(f2)
         f_prev, f_cur = f2, f1
     fingers = list(reversed(fingers))[1:]  # drop the leading 0 seed

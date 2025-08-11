@@ -1,6 +1,6 @@
 from typing import List
 from music21 import converter, note, chord, expressions, articulations, stream
-from ..types import Event
+from ..pfai.types import Event
 
 def load_score(path: str):
     """

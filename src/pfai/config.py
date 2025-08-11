@@ -42,6 +42,8 @@ class ModelConfig:
     # Rollover window detection tolerance (in semitones)
     neighbor_turn_max_interval: int = 2  # allows up to whole-step around center
     repeat_near_max_interval: int = 2    # A–A–near
+    # Large leap detection threshold (in semitones)
+    large_leap_semitones: int = 12       # leaps larger than an octave trigger guidance
 
 # Predefined hand sizes
 PROFILE_S  = HandProfile('S',  9, 10)

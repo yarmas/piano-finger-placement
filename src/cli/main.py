@@ -25,7 +25,11 @@ def app():
 
     parser = argparse.ArgumentParser(description="Piano Fingering auto-annotator (monophonic, rollover-aware).")
     parser.add_argument("--infile", required=True, help="Input MusicXML file")
-    parser.add_argument("--outfile", required=True, help="Output MusicXML file")
+    parser.add_argument(
+        "--outfile",
+        required=True,
+        help="Output MusicXML or PDF file",
+    )
     parser.add_argument("--hand-profile", default="M", choices=["S","M","L","XL"], help="Hand size profile")
     parser.add_argument("--staff", default="both", choices=["RH","LH","both"], help="Which staff to process")
     # Optional overrides for key weights (so you can tune without editing code)

@@ -1,5 +1,8 @@
 from typing import List
+from pathlib import Path
+
 from music21 import converter, note, chord, expressions, articulations, stream
+
 from ..pfai.types import Event
 
 def load_score(path: str):
@@ -45,7 +48,10 @@ def write_fingerings_and_notes(src_path: str,
                                fingering_map: dict[int, list[int]],
                                margin_notes: list[tuple[float, str]]) -> None:
     """
-    Writes finger numbers and margin notes back to a MusicXML file.
+    Write finger numbers and margin notes to a score and export it.
+
+    ``out_path`` may point to either a MusicXML file (default) or a PDF. The
+    latter will be rendered via :mod:`music21`'s PDF backend.
     """
     s = converter.parse(src_path)
 
@@ -69,5 +75,10 @@ def write_fingerings_and_notes(src_path: str,
             # layout can fail on some imported editions; ignore rather than crash
             pass
 
-    s.write('musicxml', out_path)
+    # Choose output based on extension; default to MusicXML
+    out = Path(out_path)
+    if out.suffix.lower() == ".pdf":
+        s.write("musicxml.pdf", str(out))
+    else:
+        s.write("musicxml", str(out))
     

@@ -68,15 +68,16 @@ def decode_monophonic_second_order(
     # Backtrack best tail (f_{N-2}, f_{N-1})
     tail = np.unravel_index(np.argmin(dp[N-1, :, :]), dp[N-1, :, :].shape)  # (f_{N-2}, f_{N-1})
     f_prev, f_cur = int(tail[0]), int(tail[1])
-    fingers = [f_prev, f_cur]
+
+    # Backtrack fingers from the tail, collecting them in reverse order.
+    fingers = [f_cur, f_prev]
     for i in range(N-1, 1, -1):
         back_entry = back[i][f_prev][f_cur]
         if back_entry is None:
-            break  # Stop backtracking if no valid entry
-        f2, f1 = back_entry
-        fingers.append(f2)
-        f_prev, f_cur = f2, f1
-    fingers = list(reversed(fingers))[1:]  # drop the leading 0 seed
+            break
+        f_prev, f_cur = back_entry
+        fingers.append(f_prev)
+    fingers = list(reversed(fingers))
 
     assign: Dict[int, List[int]] = {}
     for e, f in zip(seq, fingers):
